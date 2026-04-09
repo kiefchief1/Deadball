@@ -1,4 +1,5 @@
 <!doctype html>
+<!-- DEADBALL PHASE1 V2: mode-launch patch -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -1233,7 +1234,7 @@ code {
   <div class="app-shell">
     <header class="topbar">
       <div class="brand-block">
-        <div class="eyebrow eyebrow-top">Deadball Baseball</div>
+        <div class="eyebrow eyebrow-top">Deadball Baseball • Phase 1 v2</div>
         <h1>Video game style baseball tabletop command center</h1>
         <p class="subhead">Pick a mode, jump into the ballpark, and run your Deadball universe from a dark broadcast-style game screen built for desktop and mobile web.</p>
       </div>
@@ -1268,22 +1269,22 @@ code {
             <div class="broadcast-headline">Built like a video game front end, then drops you into the booth</div>
           </div>
           <div class="mode-grid">
-            <button type="button" id="modeExhibitionBtn" class="mode-card mode-primary" onclick="window.deadballLaunchMode && window.deadballLaunchMode('oneoff')">
+            <button id="modeExhibitionBtn" class="mode-card mode-primary">
               <span class="mode-kicker">Jump in now</span>
               <strong>One-Off Game</strong>
               <span>Start a fast exhibition with full GameCenter presentation, live scorebug, Gamecast calls, and a final magazine-style recap.</span>
             </button>
-            <button type="button" id="modeSeasonBtn" class="mode-card" onclick="window.deadballLaunchMode && window.deadballLaunchMode('season')">
+            <button id="modeSeasonBtn" class="mode-card">
               <span class="mode-kicker">Track a chase</span>
               <strong>Season</strong>
               <span>Use campaign notebooks, saved games, standings scaffolding, and Nine Game Pennant style tracking.</span>
             </button>
-            <button type="button" id="modeFranchiseBtn" class="mode-card" onclick="window.deadballLaunchMode && window.deadballLaunchMode('franchise')">
+            <button id="modeFranchiseBtn" class="mode-card">
               <span class="mode-kicker">Build your club</span>
               <strong>Franchise</strong>
               <span>Generate a club identity, manager, ballpark, and roster shell for a bigger long-term save.</span>
             </button>
-            <button type="button" id="modePlayoffBtn" class="mode-card" onclick="window.deadballLaunchMode && window.deadballLaunchMode('playoffs')">
+            <button id="modePlayoffBtn" class="mode-card">
               <span class="mode-kicker">October mode</span>
               <strong>Playoffs</strong>
               <span>Seed a bracket from campaign standings and simulate or manage a title run.</span>
@@ -1872,43 +1873,6 @@ code {
   let autoPlayScope = null;
 
   document.addEventListener('DOMContentLoaded', init);
-  window.deadballLaunchMode = function(mode) {
-    try {
-      if (mode === 'oneoff') {
-        userPrefs.gameMode = 'oneoff';
-        writeJson(STORAGE_KEYS.prefs, userPrefs);
-        startNewGame();
-        showTab('game');
-        return;
-      }
-      if (mode === 'season') {
-        userPrefs.gameMode = 'season';
-        writeJson(STORAGE_KEYS.prefs, userPrefs);
-        renderModeHub();
-        showTab('campaigns');
-        return;
-      }
-      if (mode === 'franchise') {
-        userPrefs.gameMode = 'franchise';
-        writeJson(STORAGE_KEYS.prefs, userPrefs);
-        renderModeHub();
-        showTab('franchise');
-        return;
-      }
-      if (mode === 'playoffs') {
-        userPrefs.gameMode = 'playoffs';
-        writeJson(STORAGE_KEYS.prefs, userPrefs);
-        renderModeHub();
-        showTab('playoffs');
-        return;
-      }
-    } catch (error) {
-      console.error('Mode launch failed', error);
-      const status = document.getElementById('statusBar');
-      if (status) status.textContent = 'Mode launch hit an error. Refresh once, then try again.';
-      alert('That mode did not launch cleanly. Refresh once and try again.');
-    }
-  };
 
   function init() {
     bindUi();
@@ -1953,10 +1917,10 @@ code {
     ui.generateBracketBtn?.addEventListener('click', generateBracket);
     ui.simulateBracketBtn?.addEventListener('click', simulateBracket);
     ui.openModeHubBtn?.addEventListener('click', () => showTab('mode'));
-    ui.modeExhibitionBtn?.addEventListener('click', () => window.deadballLaunchMode('oneoff'));
-    ui.modeSeasonBtn?.addEventListener('click', () => window.deadballLaunchMode('season'));
-    ui.modeFranchiseBtn?.addEventListener('click', () => window.deadballLaunchMode('franchise'));
-    ui.modePlayoffBtn?.addEventListener('click', () => window.deadballLaunchMode('playoffs'));
+    ui.modeExhibitionBtn?.addEventListener('click', () => { userPrefs.gameMode = 'oneoff'; writeJson(STORAGE_KEYS.prefs, userPrefs); startNewGame(); showTab('game'); });
+    ui.modeSeasonBtn?.addEventListener('click', () => { userPrefs.gameMode = 'season'; writeJson(STORAGE_KEYS.prefs, userPrefs); renderModeHub(); showTab('campaigns'); });
+    ui.modeFranchiseBtn?.addEventListener('click', () => { userPrefs.gameMode = 'franchise'; writeJson(STORAGE_KEYS.prefs, userPrefs); renderModeHub(); showTab('franchise'); });
+    ui.modePlayoffBtn?.addEventListener('click', () => { userPrefs.gameMode = 'playoffs'; writeJson(STORAGE_KEYS.prefs, userPrefs); renderModeHub(); showTab('playoffs'); });
     if (!campaigns.length) {
       const starterCampaign = {
         id: makeId(),
