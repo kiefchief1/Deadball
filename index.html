@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Deadball GameCenter</title>
-  <meta name="description" content="Responsive solo Deadball web app with broadcast-style scoreboard, Gamecast play-by-play, franchise tools, and season tracking.">
+  <meta name="description" content="Responsive solo Deadball web app with ESPN-style Game Center presentation, mode select, broadcast scoreboard, and campaign tools.">
   <style>
 :root {
   --bg: #06090f;
@@ -1036,43 +1036,280 @@ code {
   }
 }
 
+
+/* Phase 1 mode hub + video-game front end */
+.mode-hero-card {
+  background: linear-gradient(180deg, rgba(14,22,35,.96), rgba(8,12,20,.96));
+  border: 1px solid rgba(78, 112, 160, .25);
+}
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+.mode-card {
+  appearance: none;
+  border: 1px solid rgba(76, 105, 150, .36);
+  background: linear-gradient(180deg, rgba(16,24,38,.98), rgba(9,13,22,.98));
+  border-radius: 18px;
+  color: var(--text);
+  text-align: left;
+  padding: 18px;
+  display: grid;
+  gap: 10px;
+  min-height: 188px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.mode-card:hover,
+.mode-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(241, 199, 91, .7);
+  box-shadow: 0 18px 40px rgba(0,0,0,.38);
+  outline: none;
+}
+.mode-primary {
+  background: linear-gradient(180deg, rgba(42,16,20,.98), rgba(16,24,38,.98));
+  border-color: rgba(239, 43, 45, .55);
+}
+.mode-kicker {
+  font-size: .78rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.mode-card strong {
+  font-size: 1.25rem;
+}
+.mode-card span:last-child {
+  color: var(--muted);
+  line-height: 1.5;
+}
+.mode-lower-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 16px;
+}
+.mode-summary-card {
+  border-radius: 16px;
+  border: 1px solid rgba(58,82,118,.34);
+  background: rgba(10,15,24,.78);
+  padding: 16px 18px;
+}
+.mode-summary-copy {
+  color: var(--muted);
+  line-height: 1.55;
+}
+.game-shell-grid {
+  grid-template-columns: 320px minmax(0, 1fr) 320px;
+  align-items: start;
+}
+.game-main-column {
+  display: grid;
+  gap: 18px;
+}
+.side-rail-card {
+  min-height: 100%;
+}
+.action-grid-tight {
+  margin-bottom: 12px;
+}
+#teamJson {
+  width: 100%;
+}
+.topbar-actions #openModeHubBtn {
+  border-color: rgba(241,199,91,.45);
+}
+@media (max-width: 1180px) {
+  .mode-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .game-shell-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 720px) {
+  .mode-grid,
+  .mode-lower-grid {
+    grid-template-columns: 1fr;
+  }
+  .mode-card {
+    min-height: 0;
+  }
+}
+
+.broadcast-control-strip {
+  display: grid;
+  grid-template-columns: 1.3fr 1.1fr 1fr;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.control-strip-block {
+  border: 1px solid rgba(58,82,118,.6);
+  background: linear-gradient(180deg, rgba(10,17,27,.9), rgba(16,24,38,.96));
+  border-radius: 14px;
+  padding: 12px;
+}
+.control-strip-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.mini-pill-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.mini-pill-row button {
+  border-radius: 999px;
+  padding: .72rem .95rem;
+}
+.control-strip-options {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+.control-strip-options select {
+  width: 100%;
+}
+.compact-toggle {
+  margin-top: 2px;
+}
+.live-auto {
+  border-color: rgba(93,202,134,.75) !important;
+  box-shadow: 0 0 0 1px rgba(93,202,134,.25) inset;
+}
+.gamecast-inning-break {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(6,9,15,.96), rgba(6,9,15,.88));
+  color: var(--gold);
+  font-size: 11px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  padding: 8px 0 6px;
+  margin-top: 6px;
+  border-bottom: 1px solid rgba(241,199,91,.18);
+}
+.lineup-live-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.lineup-live-stats span {
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(58,82,118,.35);
+}
+@media (max-width: 1180px) {
+  .broadcast-control-strip {
+    grid-template-columns: 1fr 1fr;
+  }
+  .control-strip-options {
+    grid-column: span 2;
+  }
+}
+@media (max-width: 720px) {
+  .broadcast-control-strip {
+    grid-template-columns: 1fr;
+  }
+  .control-strip-options {
+    grid-column: auto;
+  }
+}
+
 </style>
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
       <div class="brand-block">
-        <div class="eyebrow eyebrow-top">Deadball GameCenter</div>
-        <h1>Broadcast-style solo baseball on desktop and mobile web</h1>
-        <p class="subhead">Fast exhibition play, radio-call game flow, season notes, and franchise tools in one responsive scoreboard-first app.</p>
+        <div class="eyebrow eyebrow-top">Deadball Baseball</div>
+        <h1>Video game style baseball tabletop command center</h1>
+        <p class="subhead">Pick a mode, jump into the ballpark, and run your Deadball universe from a dark broadcast-style game screen built for desktop and mobile web.</p>
       </div>
       <div class="topbar-actions">
-        <button id="newGameBtn" class="primary">Start New Game</button>
+        <button id="openModeHubBtn">Mode Select</button>
+        <button id="newGameBtn" class="primary">Start Exhibition</button>
         <button id="saveGameBtn">Save Finished Game</button>
       </div>
     </header>
 
     <nav class="tabs" aria-label="Primary">
-      <button class="tab active" data-tab="game">GameCenter</button>
-      <button class="tab" data-tab="archive">Archive</button>
-      <button class="tab" data-tab="campaigns">Campaign Hub</button>
-      <button class="tab" data-tab="sourcebook">Sourcebook</button>
-      <button class="tab" data-tab="teams">Teams</button>
+      <button class="tab active" data-tab="mode">Mode Select</button>
+      <button class="tab" data-tab="game">GameCenter</button>
+      <button class="tab" data-tab="campaigns">Season Hub</button>
       <button class="tab" data-tab="franchise">Franchise Lab</button>
+      <button class="tab" data-tab="teams">Teams</button>
+      <button class="tab" data-tab="archive">Archive</button>
+      <button class="tab" data-tab="sourcebook">Sourcebook</button>
       <button class="tab" data-tab="frontoffice">Front Office</button>
       <button class="tab" data-tab="playoffs">Playoffs</button>
       <button class="tab" data-tab="deploy">Deploy</button>
     </nav>
 
     <main>
-      <section class="panel active" id="tab-game">
+      <section class="panel active" id="tab-mode">
+        <article class="card mode-hero-card">
+          <div class="card-header broadcast-header">
+            <div>
+              <div class="eyebrow">Select mode</div>
+              <h2>Choose how you want to play</h2>
+            </div>
+            <div class="broadcast-headline">Built like a video game front end, then drops you into the booth</div>
+          </div>
+          <div class="mode-grid">
+            <button id="modeExhibitionBtn" class="mode-card mode-primary">
+              <span class="mode-kicker">Jump in now</span>
+              <strong>One-Off Game</strong>
+              <span>Start a fast exhibition with full GameCenter presentation, live scorebug, Gamecast calls, and a final magazine-style recap.</span>
+            </button>
+            <button id="modeSeasonBtn" class="mode-card">
+              <span class="mode-kicker">Track a chase</span>
+              <strong>Season</strong>
+              <span>Use campaign notebooks, saved games, standings scaffolding, and Nine Game Pennant style tracking.</span>
+            </button>
+            <button id="modeFranchiseBtn" class="mode-card">
+              <span class="mode-kicker">Build your club</span>
+              <strong>Franchise</strong>
+              <span>Generate a club identity, manager, ballpark, and roster shell for a bigger long-term save.</span>
+            </button>
+            <button id="modePlayoffBtn" class="mode-card">
+              <span class="mode-kicker">October mode</span>
+              <strong>Playoffs</strong>
+              <span>Seed a bracket from campaign standings and simulate or manage a title run.</span>
+            </button>
+          </div>
+          <div class="mode-lower-grid">
+            <div class="mode-summary-card">
+              <div class="section-label">Current save state</div>
+              <div id="modeSummary" class="mode-summary-copy">Loading your booth...</div>
+            </div>
+            <div class="mode-summary-card mode-summary-copy">
+              <div class="section-label">Phase 1 focus</div>
+              <p>The top priority is the live baseball screen: scoreboard-first layout, easier mode flow, Gamecast polish, and better mobile readability. Franchise and season tools stay here, but the main event is still the ballgame.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel" id="tab-game">
         <article class="card broadcast-card">
           <div class="card-header broadcast-header">
             <div>
               <div class="eyebrow">Live GameCenter</div>
-              <h2>Broadcast Scorebug</h2>
+              <h2>Broadcast scorebug</h2>
             </div>
-            <div class="broadcast-headline">Built for exhibition play now, season mode next</div>
+            <div class="broadcast-headline">Exhibition first, season-ready shell next</div>
           </div>
           <div id="heroBoard" class="hero-board"></div>
           <div class="broadcast-lower-grid">
@@ -1092,53 +1329,100 @@ code {
           </div>
         </article>
 
-        <div class="card-grid broadcast-main-grid">
-          <article class="card control-card control-card-broadcast">
+        <div class="card-grid game-shell-grid">
+          <article class="card side-rail-card">
             <div class="card-header compact-card-header">
               <div>
-                <div class="eyebrow">At-bat controls</div>
-                <h2>Game actions</h2>
+                <div class="eyebrow">Batting order</div>
+                <h2>Lineup tracker</h2>
               </div>
             </div>
-            <div class="setup-grid-lite form-grid two-col-form">
-              <label>
-                Away team
-                <select id="awaySelect"></select>
-              </label>
-              <label>
-                Home team
-                <select id="homeSelect"></select>
-              </label>
-              <label>
-                Active campaign
-                <select id="campaignSelect"></select>
-              </label>
-              <label class="checkbox-row checkbox-row-panel">
-                <input type="checkbox" id="odditiesToggle" checked>
-                Use oddities and injuries
-              </label>
-            </div>
-            <div class="action-grid action-grid-broadcast">
-              <button id="swingBtn" class="primary">Swing</button>
-              <button id="buntBtn">Bunt</button>
-              <button id="stealBtn">Steal</button>
-              <button id="hitRunBtn">Hit &amp; Run</button>
-              <button id="autoHalfBtn">Auto Half Inning</button>
-              <button id="autoGameBtn">Auto Game</button>
-            </div>
-            <div id="matchupCard" class="matchup-card matchup-card-broadcast"></div>
-            <p class="hint">Tip: use the Teams tab to add your own clubs through JSON import. Sample Southern Circuit teams are included for quick play.</p>
+            <div id="lineupRail" class="lineup-rail"></div>
           </article>
 
-          <article class="card log-card log-card-broadcast">
+          <div class="game-main-column">
+            <article class="card control-card control-card-broadcast">
+              <div class="card-header compact-card-header">
+                <div>
+                  <div class="eyebrow">At-bat controls</div>
+                  <h2>Game actions</h2>
+                </div>
+              </div>
+              <div class="setup-grid-lite form-grid two-col-form">
+                <label>
+                  Away team
+                  <select id="awaySelect"></select>
+                </label>
+                <label>
+                  Home team
+                  <select id="homeSelect"></select>
+                </label>
+                <label>
+                  Active campaign
+                  <select id="campaignSelect"></select>
+                </label>
+                <label class="checkbox-row checkbox-row-panel">
+                  <input type="checkbox" id="odditiesToggle" checked>
+                  Use oddities and injuries
+                </label>
+              </div>
+              <div class="broadcast-control-strip">
+                <div class="control-strip-block">
+                  <div class="control-strip-label">Play style</div>
+                  <div class="mini-pill-row">
+                    <button id="swingBtn" class="primary">⚾ Batter Up!</button>
+                    <button id="buntBtn">Bunt</button>
+                    <button id="stealBtn">Steal</button>
+                    <button id="hitRunBtn">Hit &amp; Run</button>
+                  </div>
+                </div>
+                <div class="control-strip-block">
+                  <div class="control-strip-label">Auto-play</div>
+                  <div class="mini-pill-row">
+                    <button id="autoHalfBtn">Auto Half</button>
+                    <button id="autoGameBtn">Auto Game</button>
+                    <button id="stopAutoBtn">Stop</button>
+                  </div>
+                </div>
+                <div class="control-strip-block control-strip-options">
+                  <label>
+                    Feed speed
+                    <select id="autoSpeedSelect">
+                      <option value="slow">Slow</option>
+                      <option value="normal">Normal</option>
+                      <option value="fast">Fast</option>
+                    </select>
+                  </label>
+                  <label class="checkbox-row checkbox-row-panel compact-toggle">
+                    <input type="checkbox" id="voiceToggle">
+                    Radio booth voice
+                  </label>
+                </div>
+              </div>
+              <div id="matchupCard" class="matchup-card matchup-card-broadcast"></div>
+              <p class="hint">Video game front-end, tabletop heart. Build clubs in Teams, then come back here and call the game pitch by pitch or let the booth run the feed.</p>
+            </article>
+
+            <article class="card log-card log-card-broadcast">
+              <div class="card-header compact-card-header">
+                <div>
+                  <div class="eyebrow">Live call</div>
+                  <h2>Gamecast</h2>
+                </div>
+                <button id="clearLogBtn">Trim visible log</button>
+              </div>
+              <div id="log" class="log gamecast-log"></div>
+            </article>
+          </div>
+
+          <article class="card side-rail-card">
             <div class="card-header compact-card-header">
               <div>
-                <div class="eyebrow">Live call</div>
-                <h2>Gamecast</h2>
+                <div class="eyebrow">Broadcast notes</div>
+                <h2>Booth notes</h2>
               </div>
-              <button id="clearLogBtn">Trim visible log</button>
             </div>
-            <div id="log" class="log gamecast-log"></div>
+            <div id="headlineRail" class="headline-rail"></div>
           </article>
         </div>
 
@@ -1162,19 +1446,6 @@ code {
             <div id="recap" class="recap empty">Finish a game and the full writeup will appear here.</div>
           </article>
         </div>
-      </section>
-
-      <section class="panel" id="tab-archive">
-        <article class="card">
-          <div class="card-header">
-            <div>
-              <div class="eyebrow">Saved history</div>
-              <h2>Archive</h2>
-            </div>
-            <button id="clearArchiveBtn">Clear Archive</button>
-          </div>
-          <div id="archiveList" class="stack-list"></div>
-        </article>
       </section>
 
       <section class="panel" id="tab-campaigns">
@@ -1214,18 +1485,6 @@ code {
         </div>
       </section>
 
-      <section class="panel" id="tab-sourcebook">
-        <article class="card">
-          <div class="card-header compact-card-header">
-            <div>
-              <div class="eyebrow">Uploaded material</div>
-              <h2>Source-derived modes and materials</h2>
-            </div>
-          </div>
-          <div id="sourcebookContent" class="sourcebook-grid"></div>
-        </article>
-      </section>
-
       <section class="panel" id="tab-franchise">
         <div class="card-grid">
           <article class="card">
@@ -1259,6 +1518,61 @@ code {
             <div id="franchiseOutput" class="stack-list"></div>
           </article>
         </div>
+      </section>
+
+      <section class="panel" id="tab-teams">
+        <div class="card-grid">
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Loaded clubs</div>
+                <h2>Teams</h2>
+              </div>
+            </div>
+            <div id="teamList" class="stack-list"></div>
+          </article>
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Custom club</div>
+                <h2>Import team JSON</h2>
+              </div>
+            </div>
+            <div class="action-grid action-grid-tight">
+              <button id="loadExampleBtn">Load Example</button>
+              <button id="importTeamBtn" class="primary">Import Team</button>
+            </div>
+            <label>
+              Team JSON
+              <textarea id="teamJson" rows="18" placeholder="Paste a custom team JSON object here."></textarea>
+            </label>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-archive">
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <div class="eyebrow">Saved history</div>
+              <h2>Archive</h2>
+            </div>
+            <button id="clearArchiveBtn">Clear Archive</button>
+          </div>
+          <div id="archiveList" class="stack-list"></div>
+        </article>
+      </section>
+
+      <section class="panel" id="tab-sourcebook">
+        <article class="card">
+          <div class="card-header compact-card-header">
+            <div>
+              <div class="eyebrow">Uploaded material</div>
+              <h2>Source-derived modes and materials</h2>
+            </div>
+          </div>
+          <div id="sourcebookContent" class="sourcebook-grid"></div>
+        </article>
       </section>
 
       <section class="panel" id="tab-frontoffice">
@@ -1348,37 +1662,8 @@ code {
           <div id="deployOutput" class="stack-list"></div>
         </article>
       </section>
-
-      <section class="panel" id="tab-teams">
-        <div class="card-grid">
-          <article class="card">
-            <div class="card-header compact-card-header">
-              <div>
-                <div class="eyebrow">Loaded clubs</div>
-                <h2>Teams in app</h2>
-              </div>
-            </div>
-            <div id="teamList" class="stack-list"></div>
-          </article>
-          <article class="card">
-            <div class="card-header compact-card-header">
-              <div>
-                <div class="eyebrow">Import</div>
-                <h2>Custom team JSON</h2>
-              </div>
-            </div>
-            <p class="hint">Paste JSON for one team. Minimum fields: <code>name</code>, <code>manager</code>, <code>daring</code>, <code>lineup</code>, <code>starter</code>, <code>bullpen</code>.</p>
-            <textarea id="teamJson" rows="18"></textarea>
-            <div class="action-grid import-grid">
-              <button id="loadExampleBtn">Load Example JSON</button>
-              <button id="importTeamBtn" class="primary">Import Team</button>
-            </div>
-          </article>
-        </div>
-      </section>
     </main>
   </div>
-
   <script>
 (() => {
   const STORAGE_KEYS = {
@@ -1388,7 +1673,8 @@ code {
     franchise: 'deadball-radio-franchise',
     prospects: 'deadball-radio-prospects',
     tradeEval: 'deadball-radio-trade-eval',
-    playoffs: 'deadball-radio-playoffs'
+    playoffs: 'deadball-radio-playoffs',
+    prefs: 'deadball-radio-prefs'
   };
 
   const PITCH_LEVELS = ['-d20', '-d12', '-d8', '-d4', 'd4', 'd8', 'd12', 'd20'];
@@ -1580,7 +1866,10 @@ code {
   let prospectBoard = readJson(STORAGE_KEYS.prospects, []);
   let tradeEval = readJson(STORAGE_KEYS.tradeEval, null);
   let playoffBracket = readJson(STORAGE_KEYS.playoffs, null);
+  let userPrefs = readJson(STORAGE_KEYS.prefs, { autoSpeed: 'normal', voiceEnabled: false, gameMode: 'oneoff' });
   let currentGame = null;
+  let autoPlayTimer = null;
+  let autoPlayScope = null;
 
   document.addEventListener('DOMContentLoaded', init);
 
@@ -1599,9 +1888,10 @@ code {
     renderFrontOffice();
     renderPlayoffs();
     renderDeploy();
+    renderModeHub();
     ui.loadExampleBtn.addEventListener('click', loadExampleJson);
     ui.importTeamBtn.addEventListener('click', importTeamJson);
-    ui.newGameBtn.addEventListener('click', startNewGame);
+    ui.newGameBtn.addEventListener('click', () => { startNewGame(); showTab('game'); });
     ui.saveGameBtn.addEventListener('click', saveCurrentGame);
     ui.clearArchiveBtn.addEventListener('click', clearArchive);
     ui.createCampaignBtn.addEventListener('click', createCampaign);
@@ -1612,6 +1902,9 @@ code {
     ui.hitRunBtn.addEventListener('click', () => playAction('hitrun'));
     ui.autoHalfBtn.addEventListener('click', () => autoPlayHalfInning());
     ui.autoGameBtn.addEventListener('click', () => autoPlayGame());
+    ui.stopAutoBtn?.addEventListener('click', stopAutoPlay);
+    ui.autoSpeedSelect?.addEventListener('change', handlePrefChange);
+    ui.voiceToggle?.addEventListener('change', handlePrefChange);
     ui.generateFranchiseBtn?.addEventListener('click', generateFranchise);
     ui.saveFranchiseBtn?.addEventListener('click', saveFranchiseAsTeam);
     ui.foTeamSelect?.addEventListener('change', renderFrontOffice);
@@ -1622,6 +1915,11 @@ code {
     ui.draftProspectBtn?.addEventListener('click', draftProspect);
     ui.generateBracketBtn?.addEventListener('click', generateBracket);
     ui.simulateBracketBtn?.addEventListener('click', simulateBracket);
+    ui.openModeHubBtn?.addEventListener('click', () => showTab('mode'));
+    ui.modeExhibitionBtn?.addEventListener('click', () => { userPrefs.gameMode = 'oneoff'; writeJson(STORAGE_KEYS.prefs, userPrefs); startNewGame(); showTab('game'); });
+    ui.modeSeasonBtn?.addEventListener('click', () => { userPrefs.gameMode = 'season'; writeJson(STORAGE_KEYS.prefs, userPrefs); renderModeHub(); showTab('campaigns'); });
+    ui.modeFranchiseBtn?.addEventListener('click', () => { userPrefs.gameMode = 'franchise'; writeJson(STORAGE_KEYS.prefs, userPrefs); renderModeHub(); showTab('franchise'); });
+    ui.modePlayoffBtn?.addEventListener('click', () => { userPrefs.gameMode = 'playoffs'; writeJson(STORAGE_KEYS.prefs, userPrefs); renderModeHub(); showTab('playoffs'); });
     if (!campaigns.length) {
       const starterCampaign = {
         id: makeId(),
@@ -1637,7 +1935,9 @@ code {
       renderCampaigns();
       populateCampaignSelectors();
     }
+    applyPrefsToControls();
     startNewGame();
+    showTab('mode');
   }
 
   function bindUi() {
@@ -1645,21 +1945,95 @@ code {
       'awaySelect', 'homeSelect', 'campaignSelect', 'odditiesToggle', 'newGameBtn', 'saveGameBtn', 'heroBoard', 'scoreboard', 'diamond', 'countbox',
       'statusBar', 'matchupCard', 'lineupRail', 'headlineRail', 'log', 'boxscore', 'recap', 'archiveList', 'clearArchiveBtn', 'campaignName', 'campaignTemplate',
       'campaignNotes', 'createCampaignBtn', 'campaignList', 'sourcebookContent', 'teamList', 'teamJson', 'loadExampleBtn', 'importTeamBtn',
-      'swingBtn', 'buntBtn', 'stealBtn', 'hitRunBtn', 'autoHalfBtn', 'autoGameBtn', 'clearLogBtn',
+      'swingBtn', 'buntBtn', 'stealBtn', 'hitRunBtn', 'autoHalfBtn', 'autoGameBtn', 'stopAutoBtn', 'autoSpeedSelect', 'voiceToggle', 'clearLogBtn',
       'frEra','frCity','frMascot','frBallpark','frManager','frSaveName','generateFranchiseBtn','saveFranchiseBtn','franchiseOutput',
       'foTeamSelect','tradePartnerSelect','rosterOutput','tradeSendSelect','tradeReceiveSelect','evaluateTradeBtn','applyTradeBtn','tradeResult',
       'draftTeamSelect','draftCount','generateProspectsBtn','draftProspectBtn','prospectOutput',
-      'playoffCampaignSelect','playoffSize','playoffSeriesLength','generateBracketBtn','simulateBracketBtn','playoffOutput','deployOutput'
+      'playoffCampaignSelect','playoffSize','playoffSeriesLength','generateBracketBtn','simulateBracketBtn','playoffOutput','deployOutput',
+      'openModeHubBtn','modeExhibitionBtn','modeSeasonBtn','modeFranchiseBtn','modePlayoffBtn','modeSummary'
     ];
     ids.forEach(id => ui[id] = document.getElementById(id));
     document.querySelectorAll('.tab').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
-      });
+      btn.addEventListener('click', () => showTab(btn.dataset.tab));
     });
+  }
+
+  function showTab(tabName) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tabName}`));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handlePrefChange() {
+    userPrefs.autoSpeed = ui.autoSpeedSelect?.value || 'normal';
+    userPrefs.voiceEnabled = !!ui.voiceToggle?.checked;
+    writeJson(STORAGE_KEYS.prefs, userPrefs);
+    updateAutoButtons();
+    renderModeHub();
+  }
+
+  function applyPrefsToControls() {
+    if (ui.autoSpeedSelect) ui.autoSpeedSelect.value = userPrefs.autoSpeed || 'normal';
+    if (ui.voiceToggle) ui.voiceToggle.checked = !!userPrefs.voiceEnabled;
+    updateAutoButtons();
+  }
+
+  function currentAutoDelay() {
+    const speed = userPrefs.autoSpeed || 'normal';
+    if (speed === 'slow') return 1250;
+    if (speed === 'fast') return 240;
+    return 650;
+  }
+
+  function updateAutoButtons() {
+    const running = !!autoPlayTimer;
+    if (ui.autoHalfBtn) ui.autoHalfBtn.classList.toggle('live-auto', running && autoPlayScope === 'half');
+    if (ui.autoGameBtn) ui.autoGameBtn.classList.toggle('live-auto', running && autoPlayScope === 'game');
+    if (ui.stopAutoBtn) ui.stopAutoBtn.disabled = !running;
+  }
+
+  function stopAutoPlay() {
+    if (autoPlayTimer) clearTimeout(autoPlayTimer);
+    autoPlayTimer = null;
+    autoPlayScope = null;
+    updateAutoButtons();
+  }
+
+  function queueAutoPlay(scope) {
+    if (!currentGame || currentGame.over) return;
+    stopAutoPlay();
+    autoPlayScope = scope;
+    const startMarker = `${currentGame.half}-${currentGame.inning}`;
+    const tick = () => {
+      if (!currentGame || currentGame.over) {
+        stopAutoPlay();
+        return;
+      }
+      if (scope === 'half' && `${currentGame.half}-${currentGame.inning}` !== startMarker) {
+        stopAutoPlay();
+        updateUi();
+        return;
+      }
+      const action = chooseAiAction(currentGame);
+      playAction(action, { suppressAnnounce: !userPrefs.voiceEnabled });
+      if (!currentGame.over) autoPlayTimer = setTimeout(tick, currentAutoDelay());
+      else stopAutoPlay();
+    };
+    updateAutoButtons();
+    autoPlayTimer = setTimeout(tick, currentAutoDelay());
+  }
+
+  function announceEntry(entry) {
+    if (!entry || !userPrefs.voiceEnabled || !('speechSynthesis' in window)) return;
+    const utterance = new SpeechSynthesisUtterance(entry.text);
+    utterance.rate = userPrefs.autoSpeed === 'slow' ? 0.9 : userPrefs.autoSpeed === 'fast' ? 1.2 : 1.0;
+    utterance.pitch = 0.95;
+    try {
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    } catch (err) {
+      console.warn('Speech unavailable', err);
+    }
   }
 
   function renderTabs() {
@@ -1669,6 +2043,22 @@ code {
       option.textContent = template.name;
       ui.campaignTemplate.appendChild(option);
     });
+  }
+
+
+  function renderModeHub() {
+    if (!ui.modeSummary) return;
+    const campaignCount = campaigns.length;
+    const customCount = customTeams.length;
+    const archiveCount = archive.length;
+    const currentLine = currentGame
+      ? `${currentGame.away.name} at ${currentGame.home.name} • ${currentGame.over ? 'Final' : `${capitalize(currentGame.half)} ${currentGame.inning}`}`
+      : 'No active game loaded yet.';
+    ui.modeSummary.innerHTML = `
+      <p><strong>Current game:</strong> ${currentLine}</p>
+      <p><strong>Saved recaps:</strong> ${archiveCount} • <strong>Campaigns:</strong> ${campaignCount} • <strong>Custom teams:</strong> ${customCount}</p>
+      <p>Pick <strong>One-Off Game</strong> to jump straight to the booth, <strong>Season</strong> for campaign tracking, or <strong>Franchise</strong> to build a club before first pitch.</p>
+    `;
   }
 
   function getAllTeams() {
@@ -1704,6 +2094,9 @@ code {
   }
 
   function startNewGame() {
+    stopAutoPlay();
+    userPrefs.gameMode = 'oneoff';
+    writeJson(STORAGE_KEYS.prefs, userPrefs);
     const away = findTeamByName(ui.awaySelect.value) || getAllTeams()[0];
     const home = findTeamByName(ui.homeSelect.value) || getAllTeams()[1] || getAllTeams()[0];
     const awayWorking = buildWorkingTeam(away);
@@ -1796,8 +2189,9 @@ code {
     return book;
   }
 
-  function playAction(action) {
+  function playAction(action, options = {}) {
     if (!currentGame || currentGame.over) return;
+    const beforeCount = currentGame.logs.length;
     if (action === 'steal') {
       resolveSteal(currentGame);
     } else if (action === 'bunt') {
@@ -1808,27 +2202,18 @@ code {
       resolveSwing(currentGame, { via: action });
     }
     updateUi();
+    const latest = currentGame.logs[currentGame.logs.length - 1];
+    if (!options.suppressAnnounce && currentGame.logs.length > beforeCount) announceEntry(latest);
   }
 
   function autoPlayHalfInning() {
     if (!currentGame || currentGame.over) return;
-    const halfMarker = `${currentGame.half}-${currentGame.inning}`;
-    let safety = 0;
-    while (!currentGame.over && `${currentGame.half}-${currentGame.inning}` === halfMarker && safety < 200) {
-      const action = chooseAiAction(currentGame);
-      playAction(action);
-      safety += 1;
-    }
+    queueAutoPlay('half');
   }
 
   function autoPlayGame() {
     if (!currentGame || currentGame.over) return;
-    let safety = 0;
-    while (!currentGame.over && safety < 3000) {
-      const action = chooseAiAction(currentGame);
-      playAction(action);
-      safety += 1;
-    }
+    queueAutoPlay('game');
   }
 
   function chooseAiAction(game) {
@@ -2750,6 +3135,7 @@ code {
     renderMatchupCard();
     renderLineupRail();
     renderHeadlineRail();
+    renderModeHub();
     renderLog(currentGame ? currentGame.logs.slice(-currentGame.visibleLogCount) : []);
     renderBoxscore();
     ui.recap.innerHTML = currentGame && currentGame.recap ? currentGame.recap : 'Finish a game and the full writeup will appear here.';
@@ -2950,6 +3336,7 @@ code {
       const current = isBatting && idx === team.battingIndex % team.lineup.length;
       const onDeck = isBatting && idx === (team.battingIndex + 1) % team.lineup.length;
       const inHole = isBatting && idx === (team.battingIndex + 2) % team.lineup.length;
+      const book = team.teamBatting[player.name] || { ab: 0, h: 0, rbi: 0, hr: 0 };
       const tag = current ? '<span class="lineup-tag live">At bat</span>' : onDeck ? '<span class="lineup-tag waiting">On deck</span>' : inHole ? '<span class="lineup-tag soon">In hole</span>' : `<span class="lineup-tag">${player.pos}</span>`;
       return `
         <div class="lineup-row ${current ? 'current-batter' : ''} ${onDeck ? 'on-deck' : ''} ${inHole ? 'in-hole' : ''}">
@@ -2957,6 +3344,12 @@ code {
           <div class="lineup-name">
             <strong>${player.name}</strong>
             <span>${player.pos} • ${player.hand}-handed • BT ${player.bt} / OBT ${player.obt}</span>
+            <div class="lineup-live-stats">
+              <span>AB ${book.ab}</span>
+              <span>H ${book.h}</span>
+              <span>RBI ${book.rbi}</span>
+              <span>HR ${book.hr}</span>
+            </div>
           </div>
           ${tag}
         </div>
@@ -3008,13 +3401,20 @@ code {
 
   function renderLog(entries) {
     ui.log.innerHTML = '';
+    let currentHeader = '';
     entries.forEach(entry => {
+      if (entry.inningLabel && entry.inningLabel !== currentHeader) {
+        currentHeader = entry.inningLabel;
+        const header = document.createElement('div');
+        header.className = 'gamecast-inning-break';
+        header.textContent = currentHeader;
+        ui.log.appendChild(header);
+      }
       const div = document.createElement('div');
       div.className = `log-entry ${entry.type || ''}`;
       const typeLabel = logTypeLabel(entry.type);
       div.innerHTML = `
         <div class="meta">
-          <span class="meta-chip">${entry.inningLabel}</span>
           ${typeLabel ? `<span class="meta-chip">${typeLabel}</span>` : ''}
           ${entry.meta ? `<span class="meta-detail">${entry.meta}</span>` : ''}
         </div>
@@ -3172,6 +3572,7 @@ code {
     };
     archive.push(entry);
     persistArchive();
+    renderModeHub();
     if (campaign) {
       campaign.games.push({ id: entry.id, label: `${entry.awayName} at ${entry.homeName}`, score: entry.score, savedAt: entry.savedAt });
       persistCampaigns();
@@ -3205,6 +3606,7 @@ code {
     ui.campaignSelect.value = campaign.id;
     ui.campaignName.value = '';
     ui.campaignNotes.value = '';
+    renderModeHub();
   }
 
   function loadExampleJson() {
