@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Deadball GameCenter</title>
+  <meta name="description" content="Responsive solo Deadball web app with broadcast-style scoreboard, Gamecast play-by-play, franchise tools, and season tracking.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-block">
+        <div class="eyebrow eyebrow-top">Deadball GameCenter</div>
+        <h1>Broadcast-style solo baseball on desktop and mobile web</h1>
+        <p class="subhead">Fast exhibition play, radio-call game flow, season notes, and franchise tools in one responsive scoreboard-first app.</p>
+      </div>
+      <div class="topbar-actions">
+        <button id="newGameBtn" class="primary">Start New Game</button>
+        <button id="saveGameBtn">Save Finished Game</button>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Primary">
+      <button class="tab active" data-tab="game">GameCenter</button>
+      <button class="tab" data-tab="archive">Archive</button>
+      <button class="tab" data-tab="campaigns">Campaign Hub</button>
+      <button class="tab" data-tab="sourcebook">Sourcebook</button>
+      <button class="tab" data-tab="teams">Teams</button>
+      <button class="tab" data-tab="franchise">Franchise Lab</button>
+      <button class="tab" data-tab="frontoffice">Front Office</button>
+      <button class="tab" data-tab="playoffs">Playoffs</button>
+      <button class="tab" data-tab="deploy">Deploy</button>
+    </nav>
+
+    <main>
+      <section class="panel active" id="tab-game">
+        <article class="card broadcast-card">
+          <div class="card-header broadcast-header">
+            <div>
+              <div class="eyebrow">Live GameCenter</div>
+              <h2>Broadcast Scorebug</h2>
+            </div>
+            <div class="broadcast-headline">Built for exhibition play now, season mode next</div>
+          </div>
+          <div id="heroBoard" class="hero-board"></div>
+          <div class="broadcast-lower-grid">
+            <div class="status-stack">
+              <div class="section-label">Game flow</div>
+              <div id="statusBar" class="status-bar status-bar-broadcast">Load a game to begin.</div>
+              <div class="section-label section-label-tight">Basepaths</div>
+              <div class="diamond-wrap diamond-wrap-broadcast">
+                <div class="diamond" id="diamond"></div>
+                <div class="countbox" id="countbox">Top 1, 0 out</div>
+              </div>
+            </div>
+            <div class="linescore-shell">
+              <div class="section-label">Line score</div>
+              <div id="scoreboard"></div>
+            </div>
+          </div>
+        </article>
+
+        <div class="card-grid broadcast-main-grid">
+          <article class="card control-card control-card-broadcast">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">At-bat controls</div>
+                <h2>Game actions</h2>
+              </div>
+            </div>
+            <div class="setup-grid-lite form-grid two-col-form">
+              <label>
+                Away team
+                <select id="awaySelect"></select>
+              </label>
+              <label>
+                Home team
+                <select id="homeSelect"></select>
+              </label>
+              <label>
+                Active campaign
+                <select id="campaignSelect"></select>
+              </label>
+              <label class="checkbox-row checkbox-row-panel">
+                <input type="checkbox" id="odditiesToggle" checked>
+                Use oddities and injuries
+              </label>
+            </div>
+            <div class="action-grid action-grid-broadcast">
+              <button id="swingBtn" class="primary">Swing</button>
+              <button id="buntBtn">Bunt</button>
+              <button id="stealBtn">Steal</button>
+              <button id="hitRunBtn">Hit &amp; Run</button>
+              <button id="autoHalfBtn">Auto Half Inning</button>
+              <button id="autoGameBtn">Auto Game</button>
+            </div>
+            <div id="matchupCard" class="matchup-card matchup-card-broadcast"></div>
+            <p class="hint">Tip: use the Teams tab to add your own clubs through JSON import. Sample Southern Circuit teams are included for quick play.</p>
+          </article>
+
+          <article class="card log-card log-card-broadcast">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Live call</div>
+                <h2>Gamecast</h2>
+              </div>
+              <button id="clearLogBtn">Trim visible log</button>
+            </div>
+            <div id="log" class="log gamecast-log"></div>
+          </article>
+        </div>
+
+        <div class="card-grid lower-game-grid">
+          <article class="card wide-card boxscore-card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Numbers</div>
+                <h2>Box score</h2>
+              </div>
+            </div>
+            <div id="boxscore"></div>
+          </article>
+          <article class="card wide-card recap-card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Story</div>
+                <h2>Game recap</h2>
+              </div>
+            </div>
+            <div id="recap" class="recap empty">Finish a game and the full writeup will appear here.</div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-archive">
+        <article class="card">
+          <div class="card-header">
+            <div>
+              <div class="eyebrow">Saved history</div>
+              <h2>Archive</h2>
+            </div>
+            <button id="clearArchiveBtn">Clear Archive</button>
+          </div>
+          <div id="archiveList" class="stack-list"></div>
+        </article>
+      </section>
+
+      <section class="panel" id="tab-campaigns">
+        <div class="card-grid">
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Notebook</div>
+                <h2>Create campaign</h2>
+              </div>
+            </div>
+            <div class="form-grid">
+              <label>
+                Name
+                <input id="campaignName" type="text" placeholder="2020 Pennant Chase">
+              </label>
+              <label>
+                Template
+                <select id="campaignTemplate"></select>
+              </label>
+              <label>
+                Notes
+                <textarea id="campaignNotes" rows="4" placeholder="Goals, roster notes, playoff drama, injuries, anything you want to track."></textarea>
+              </label>
+            </div>
+            <button id="createCampaignBtn" class="primary">Create Campaign</button>
+          </article>
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Active folders</div>
+                <h2>Campaigns</h2>
+              </div>
+            </div>
+            <div id="campaignList" class="stack-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-sourcebook">
+        <article class="card">
+          <div class="card-header compact-card-header">
+            <div>
+              <div class="eyebrow">Uploaded material</div>
+              <h2>Source-derived modes and materials</h2>
+            </div>
+          </div>
+          <div id="sourcebookContent" class="sourcebook-grid"></div>
+        </article>
+      </section>
+
+      <section class="panel" id="tab-franchise">
+        <div class="card-grid">
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Club builder</div>
+                <h2>Franchise generator</h2>
+              </div>
+            </div>
+            <div class="form-grid two-col-form">
+              <label>Era<select id="frEra"><option value="Modern">Modern</option><option value="Ancient">Ancient</option></select></label>
+              <label>City or region<input id="frCity" type="text" placeholder="Tampa, Queens, Asheville"></label>
+              <label>Mascot seed<input id="frMascot" type="text" placeholder="Optional mascot or nickname"></label>
+              <label>Ballpark seed<input id="frBallpark" type="text" placeholder="Optional ballpark name"></label>
+              <label>Manager seed<input id="frManager" type="text" placeholder="Optional manager name"></label>
+              <label>Save name<input id="frSaveName" type="text" placeholder="Optional custom team name"></label>
+            </div>
+            <div class="action-grid">
+              <button id="generateFranchiseBtn" class="primary">Generate Franchise</button>
+              <button id="saveFranchiseBtn">Save Franchise As Team</button>
+            </div>
+            <p class="hint">Built from the Year II franchise generator concepts: club, owner, ballpark, manager, daring, fanbase, roster sheet, and team score ideas.</p>
+          </article>
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Output</div>
+                <h2>Generated franchise</h2>
+              </div>
+            </div>
+            <div id="franchiseOutput" class="stack-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-frontoffice">
+        <div class="card-grid">
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Roster desk</div>
+                <h2>Roster management</h2>
+              </div>
+            </div>
+            <div class="form-grid two-col-form">
+              <label>Team<select id="foTeamSelect"></select></label>
+              <label>Trade partner<select id="tradePartnerSelect"></select></label>
+            </div>
+            <div id="rosterOutput" class="stack-list"></div>
+          </article>
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Trade desk</div>
+                <h2>Trade machine</h2>
+              </div>
+            </div>
+            <p class="hint">Uses the Second Edition trade value and refusal rules.</p>
+            <div class="form-grid two-col-form">
+              <label>Your players<select id="tradeSendSelect" multiple size="8"></select></label>
+              <label>Their players<select id="tradeReceiveSelect" multiple size="8"></select></label>
+            </div>
+            <div class="action-grid">
+              <button id="evaluateTradeBtn" class="primary">Evaluate Trade</button>
+              <button id="applyTradeBtn">Apply Accepted Trade</button>
+            </div>
+            <div id="tradeResult" class="mini-report"></div>
+          </article>
+        </div>
+        <div class="card-grid">
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Future talent</div>
+                <h2>Prospect draft room</h2>
+              </div>
+            </div>
+            <div class="form-grid two-col-form">
+              <label>Draft team<select id="draftTeamSelect"></select></label>
+              <label>Prospects to generate<select id="draftCount"><option value="3">3</option><option value="6">6</option><option value="9">9</option></select></label>
+            </div>
+            <div class="action-grid">
+              <button id="generateProspectsBtn" class="primary">Generate Prospects</button>
+              <button id="draftProspectBtn">Add Selected Prospect</button>
+            </div>
+            <div id="prospectOutput" class="stack-list"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="tab-playoffs">
+        <article class="card">
+          <div class="card-header compact-card-header">
+            <div>
+              <div class="eyebrow">October room</div>
+              <h2>Playoff bracket automation</h2>
+            </div>
+          </div>
+          <div class="form-grid two-col-form">
+            <label>Campaign<select id="playoffCampaignSelect"></select></label>
+            <label>Bracket size<select id="playoffSize"><option value="2">2 teams</option><option value="4" selected>4 teams</option><option value="8">8 teams</option></select></label>
+            <label>Series length<select id="playoffSeriesLength"><option value="1">Best of 1</option><option value="3">Best of 3</option><option value="5">Best of 5</option><option value="7" selected>Best of 7</option></select></label>
+          </div>
+          <div class="action-grid">
+            <button id="generateBracketBtn" class="primary">Seed Bracket</button>
+            <button id="simulateBracketBtn">Simulate Bracket</button>
+          </div>
+          <div id="playoffOutput" class="stack-list"></div>
+        </article>
+      </section>
+
+      <section class="panel" id="tab-deploy">
+        <article class="card">
+          <div class="card-header compact-card-header">
+            <div>
+              <div class="eyebrow">Deployment</div>
+              <h2>Public hosting handoff</h2>
+            </div>
+          </div>
+          <div id="deployOutput" class="stack-list"></div>
+        </article>
+      </section>
+
+      <section class="panel" id="tab-teams">
+        <div class="card-grid">
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Loaded clubs</div>
+                <h2>Teams in app</h2>
+              </div>
+            </div>
+            <div id="teamList" class="stack-list"></div>
+          </article>
+          <article class="card">
+            <div class="card-header compact-card-header">
+              <div>
+                <div class="eyebrow">Import</div>
+                <h2>Custom team JSON</h2>
+              </div>
+            </div>
+            <p class="hint">Paste JSON for one team. Minimum fields: <code>name</code>, <code>manager</code>, <code>daring</code>, <code>lineup</code>, <code>starter</code>, <code>bullpen</code>.</p>
+            <textarea id="teamJson" rows="18"></textarea>
+            <div class="action-grid import-grid">
+              <button id="loadExampleBtn">Load Example JSON</button>
+              <button id="importTeamBtn" class="primary">Import Team</button>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
